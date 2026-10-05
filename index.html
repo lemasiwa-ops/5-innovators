@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script>
+    (() => {
+      const saved = localStorage.getItem("family-money-theme");
+      if (saved === "light") document.documentElement.classList.add("light");
+    })();
+  </script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Family Money | Money skills for life</title>
+
+  <meta name="description"
+    content="Help your child learn to earn, save, spend and manage money confidently — with you still in control.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#020a18;
+      --surface:rgba(8,24,56,.85);
+      --border:rgba(0,170,255,.14);
+      --text:#d0e0f0;
+      --bright:#f0f6ff;
+      --dim:#7691aa;
+      --blue:#00aaff;
+      --cyan:#00e5ff;
+      --green:#00ff88;
+      --amber:#ffaa00;
+      --shadow:0 25px 80px rgba(0,0,0,.35);
+    }
+
+    html.light {
+      --bg:#f7fbff;
+      --surface:rgba(255,255,255,.9);
+      --border:rgba(20,80,130,.13);
+      --text:#27425d;
+      --bright:#07192c;
+      --dim:#687f94;
+      --shadow:0 22px 60px rgba(30,70,110,.12);
+    }
+
+    * { box-sizing:border-box; }
+
+    html { scroll-behavior:smooth; }
+
+    body {
+      margin:0;
+      font-family:Inter,system-ui,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 10% 20%,rgba(0,170,255,.15),transparent 27%),
+        radial-gradient(circle at 88% 65%,rgba(0,255,136,.09),transparent 28%),
+        var(--bg);
+      line-height:1.65;
+    }
+
+    body::before {
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-1;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+      background-size:60px 60px;
+    }
+
+    .container {
+      width:min(920px,calc(100% - 36px));
+      margin:auto;
+    }
+
+    header {
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter:blur(20px);
+      background:rgba(2,10,24,.67);
+      border-bottom:1px solid var(--border);
+    }
+
+    html.light header { background:rgba(255,255,255,.75); }
+
+    nav {
+      height:70px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:11px;
+      color:var(--bright);
+      font-weight:800;
+    }
+
+    .logo {
+      width:38px;
+      height:38px;
+      display:grid;
+      place-items:center;
+      border-radius:14px;
+      color:#00131f;
+      background:linear-gradient(135deg,var(--cyan),var(--green));
+    }
+
+    .theme {
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--bright);
+      border-radius:999px;
+      padding:9px 12px;
+      cursor:pointer;
+    }
+
+    section { padding:72px 0; }
+
+    .hero {
+      min-height:83vh;
+      display:flex;
+      align-items:center;
+    }
+
+    .eyebrow {
+      color:var(--green);
+      text-transform:uppercase;
+      letter-spacing:.11em;
+      font-weight:800;
+      font-size:.76rem;
+      margin-bottom:15px;
+    }
+
+    h1,h2,h3 {
+      color:var(--bright);
+      line-height:1.08;
+      margin:0;
+    }
+
+    h1 {
+      font-size:clamp(3rem,8vw,6rem);
+      letter-spacing:-.07em;
+      max-width:900px;
+    }
+
+    h2 {
+      font-size:clamp(2rem,5vw,3.6rem);
+      letter-spacing:-.05em;
+      margin-bottom:18px;
+    }
+
+    h3 {
+      font-size:1.18rem;
+      margin-bottom:8px;
+    }
+
+    .lead {
+      font-size:1.22rem;
+      max-width:720px;
+      margin:25px 0;
+    }
+
+    .reassure {
+      color:var(--dim);
+      margin-top:14px;
+      font-size:.93rem;
+    }
+
+    .buttons {
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:26px;
+    }
+
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 20px;
+      border-radius:999px;
+      border:0;
+      text-decoration:none;
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    .primary {
+      color:#00141f;
+      background:linear-gradient(135deg,var(--cyan),var(--green));
+      box-shadow:0 0 32px rgba(0,229,255,.22);
+    }
+
+    .secondary {
+      color:var(--bright);
+      background:var(--surface);
+      border:1px solid var(--border);
+    }
+
+    .grid3 {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+
+    .grid2 {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+    }
+
+    .card,.panel {
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:26px;
+      box-shadow:var(--shadow);
+    }
+
+    .card { padding:24px; }
+
+    .icon {
+      font-size:1.6rem;
+      margin-bottom:13px;
+    }
+
+    .moment {
+      padding:30px;
+    }
+
+    .moment-grid {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-top:25px;
+    }
+
+    .step {
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:18px;
+      background:rgba(255,255,255,.03);
+    }
+
+    .step strong {
+      display:block;
+      color:var(--cyan);
+      margin-bottom:6px;
+    }
+
+    .highlight {
+      color:var(--bright);
+      font-size:1.15rem;
+      font-weight:700;
+      margin-top:25px;
+    }
+
+    .age {
+      color:var(--green);
+      font-size:.75rem;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .parent-strip {
+      padding:30px;
+      text-align:center;
+    }
+
+    .parent-strip p {
+      font-size:1.18rem;
+      max-width:700px;
+      margin:12px auto 0;
+    }
+
+    details {
+      margin-bottom:10px;
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:16px 18px;
+    }
+
+    summary {
+      color:var(--bright);
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    details p {
+      margin-bottom:0;
+    }
+
+    .qualifier { padding:30px; }
+
+    .progress {
+      height:8px;
+      background:rgba(255,255,255,.08);
+      border-radius:999px;
+      overflow:hidden;
+      margin:25px 0;
+    }
+
+    .bar {
+      height:100%;
+      width:20%;
+      background:linear-gradient(90deg,var(--blue),var(--green));
+      transition:.25s;
+    }
+
+    .question {
+      font-size:1.4rem;
+      font-weight:800;
+      color:var(--bright);
+      margin-bottom:17px;
+    }
+
+    .options {
+      display:grid;
+      gap:10px;
+    }
+
+    .option {
+      text-align:left;
+      padding:15px 16px;
+      border-radius:17px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.035);
+      color:var(--text);
+      cursor:pointer;
+      font:inherit;
+    }
+
+    .option:hover {
+      border-color:var(--cyan);
+    }
+
+    .tier {
+      display:inline-block;
+      border:1px solid rgba(0,255,136,.3);
+      color:var(--green);
+      border-radius:999px;
+      padding:5px 10px;
+      font-size:.76rem;
+      font-weight:800;
+      letter-spacing:.08em;
+      margin-bottom:14px;
+    }
+
+    .result h2 {
+      max-width:700px;
+    }
+
+    .result ul {
+      columns:2;
+      padding-left:20px;
+    }
+
+    .muted { color:var(--dim); }
+
+    footer {
+      padding:35px 0 50px;
+      border-top:1px solid var(--border);
+      color:var(--dim);
+      text-align:center;
+    }
+
+    @media(max-width:760px) {
+      .grid3,.grid2,.moment-grid {
+        grid-template-columns:1fr;
+      }
+
+      .hero { min-height:auto; }
+
+      .result ul { columns:1; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <nav class="container">
+    <div class="brand">
+      <div class="logo">€</div>
+      <span>Family Money</span>
+    </div>
+
+    <button class="theme" id="themeBtn">☀️</button>
+  </nav>
+</header>
+
+
+<main>
+
+<section class="hero">
+  <div class="container">
+
+    <div class="eyebrow">
+      Money skills for ages 6–17
+    </div>
+
+    <h1>
+      Help them learn money while you're still there to guide them.
+    </h1>
+
+    <p class="lead">
+      Give your child a safe way to earn, save and spend their own money —
+      while you set the boundaries, stay informed and gradually give them
+      more independence as they grow.
+    </p>
+
+    <div class="buttons">
+      <a href="#fit" class="btn primary">
+        Find your family fit →
+      </a>
+
+      <a href="#how" class="btn secondary">
+        See how it works
+      </a>
+    </div>
+
+    <p class="reassure">
+      Parent controls • Savings goals • Chore-linked allowances • Ages 6–17
+    </p>
+
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+
+    <div class="eyebrow">Why parents choose it</div>
+
+    <h2>
+      Give them freedom to learn — without giving up control.
+    </h2>
+
+    <div class="grid3">
+
+      <article class="card">
+        <div class="icon">🛡️</div>
+        <h3>You stay in control</h3>
+        <p>
+          Set limits, manage their card and see where money is going —
+          so independence can grow at a pace you're comfortable with.
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="icon">🎯</div>
+        <h3>They learn through real choices</h3>
+        <p>
+          Saving for something they want, spending too quickly or earning
+          extra through a chore becomes part of learning how money works.
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="icon">🌱</div>
+        <h3>It grows with them</h3>
+        <p>
+          Start with simple saving and pocket money, then introduce budgeting
+          and greater independence as they move through their teenage years.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+<section id="how">
+  <div class="container">
+
+    <div class="panel moment">
+
+      <div class="eyebrow">
+        What this looks like at home
+      </div>
+
+      <h2>
+        Tuesday: the bins go out.<br>
+        Friday: €2 comes in.
+      </h2>
+
+      <div class="moment-grid">
+
+        <div class="step">
+          <strong>1 · Earn</strong>
+          You add a chore: “Take out the bins — €2.”
+        </div>
+
+        <div class="step">
+          <strong>2 · Receive</strong>
+          Once it's done, the money arrives in their account.
+        </div>
+
+        <div class="step">
+          <strong>3 · Decide</strong>
+          They choose whether to spend it or move some towards a savings goal.
+        </div>
+
+        <div class="step">
+          <strong>4 · Learn</strong>
+          A short prompt helps them understand the choice they just made.
+        </div>
+
+      </div>
+
+      <p class="highlight">
+        The lesson isn't separate from real life. The lesson is the decision.
+      </p>
+
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+
+    <div class="eyebrow">
+      Different ages. Different needs.
+    </div>
+
+    <h2>
+      A six-year-old and a sixteen-year-old shouldn't have the same money experience.
+    </h2>
+
+    <div class="grid3">
+
+      <article class="card">
+        <div class="age">Ages 6–8</div>
+        <h3>Start with simple habits</h3>
+        <p>
+          Understand earning, watch savings grow and learn that money involves choices.
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="age">Ages 9–14</div>
+        <h3>Practise making decisions</h3>
+        <p>
+          Manage pocket money, save towards goals and begin making spending decisions independently.
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="age">Ages 15–17</div>
+        <h3>Prepare for independence</h3>
+        <p>
+          Build confidence with budgeting, everyday spending and increasing responsibility before adulthood.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+    <div class="panel parent-strip">
+
+      <div class="eyebrow">For parents</div>
+
+      <h2>
+        You don't have to be a money expert to teach good money habits.
+      </h2>
+
+      <p>
+        Give them opportunities to make small decisions now — while the stakes
+        are low and you're still close enough to guide them.
+      </p>
+
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+
+    <div class="eyebrow">Questions you may have</div>
+
+    <h2>
+      Before you hand them their first card…
+    </h2>
+
+    <details>
+      <summary>Is six too young for this?</summary>
+      <p>
+        For younger children, the experience is deliberately simple and parent-led.
+        The focus is on earning, saving and understanding choices — not unrestricted spending.
+      </p>
+    </details>
+
+    <details>
+      <summary>Will I still be able to control what they spend?</summary>
+      <p>
+        Yes. Parent controls and visibility remain central to the experience.
+        You decide when they are ready for more independence.
+      </p>
+    </details>
+
+    <details>
+      <summary>Why not just give them cash?</summary>
+      <p>
+        Cash can teach valuable lessons too. The app adds visibility, savings goals,
+        regular allowances and opportunities to talk about decisions together.
+      </p>
+    </details>
+
+    <details>
+      <summary>Will this mean even more screen time?</summary>
+      <p>
+        The experience is designed around short interactions connected to real life:
+        complete a chore, check a goal, make a purchase, review what's left.
+      </p>
+    </details>
+
+    <details>
+      <summary>What happens as they get older?</summary>
+      <p>
+        Their experience evolves. You can gradually move from close supervision
+        towards greater independence as their judgement and confidence develop.
+      </p>
+    </details>
+
+  </div>
+</section>
+
+
+<section id="fit">
+  <div class="container">
+
+    <div class="eyebrow">
+      Find your family fit
+    </div>
+
+    <h2>
+      Every child starts somewhere different.
+    </h2>
+
+    <p class="lead" style="font-size:1.05rem;">
+      Answer five quick questions and we'll recommend the right balance of
+      learning, parental control and independence for your family.
+    </p>
+
+    <div class="panel qualifier">
+
+      <div class="progress">
+        <div class="bar" id="bar"></div>
+      </div>
+
+      <div id="quiz"></div>
+
+    </div>
+
+  </div>
+</section>
+
+
+</main>
+
+
+<footer>
+  <div class="container">
+    Small money decisions today. Confidence they'll use for life.
+  </div>
+</footer>
+
+
+<script>
+  const themeBtn = document.getElementById("themeBtn");
+
+  function updateThemeIcon() {
+    themeBtn.textContent =
+      document.documentElement.classList.contains("light")
+        ? "🌙"
+        : "☀️";
+  }
+
+  updateThemeIcon();
+
+  themeBtn.addEventListener("click", () => {
+    document.documentElement.classList.toggle("light");
+
+    localStorage.setItem(
+      "family-money-theme",
+      document.documentElement.classList.contains("light")
+        ? "light"
+        : "dark"
+    );
+
+    updateThemeIcon();
+  });
+
+
+  const questions = [
+    {
+      q:"How many children would use it?",
+      options:["One","Two","Three","Four or more"]
+    },
+    {
+      q:"What age is your youngest child?",
+      options:["6–8","9–11","12–14","15–17"]
+    },
+    {
+      q:"What age is your oldest child?",
+      options:["6–8","9–11","12–14","15–17"]
+    },
+    {
+      q:"What would you most like them to learn right now?",
+      options:[
+        "Where money comes from and how earning works",
+        "How to save towards something they want",
+        "How to manage weekly spending",
+        "How to become more financially independent"
+      ]
+    },
+    {
+      q:"How involved would you like to be?",
+      options:[
+        "I'd like to approve most activity",
+        "I'd like guidance and visibility",
+        "I'd like them making choices within limits",
+        "I'd like oversight while they become more independent"
+      ]
+    }
+  ];
+
+  let step = 0;
+  let answers = [];
+
+  const quiz = document.getElementById("quiz");
+  const bar = document.getElementById("bar");
+
+
+  function renderQuestion() {
+
+    bar.style.width =
+      ((step + 1) / questions.length * 100) + "%";
+
+    const current = questions[step];
+
+    quiz.innerHTML = `
+      <div class="question">
+        ${current.q}
+      </div>
+
+      <div class="options">
+        ${current.options.map((text,i) => `
+          <button class="option" data-index="${i}">
+            ${text}
+          </button>
+        `).join("")}
+      </div>
+
+      ${
+        step > 0
+          ? `<div class="buttons">
+               <button class="btn secondary" id="back">
+                 ← Back
+               </button>
+             </div>`
+          : ""
+      }
+    `;
+
+
+    document.querySelectorAll(".option").forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        answers[step] =
+          Number(button.dataset.index);
+
+        if (step < questions.length - 1) {
+
+          step++;
+          renderQuestion();
+
+        } else {
+
+          renderResult();
+
+        }
+      });
+
+    });
+
+
+    const back =
+      document.getElementById("back");
+
+    if (back) {
+
+      back.addEventListener("click", () => {
+
+        step--;
+        renderQuestion();
+
+      });
+
+    }
+
+  }
+
+
+  function renderResult() {
+
+    const family = answers[0];
+    const youngest = answers[1];
+    const oldest = answers[2];
+    const learning = answers[3];
+    const independence = answers[4];
+
+    const score =
+      youngest +
+      oldest * 2 +
+      learning +
+      independence;
+
+    let result;
+
+
+    if (
+      family >= 2 ||
+      oldest === 3 ||
+      oldest - youngest >= 2 ||
+      score >= 9
+    ) {
+
+      result = {
+
+        tier:"FAMILY",
+
+        title:
+          "One family. Different ages. Different money skills.",
+
+        copy:
+          "Your family needs flexibility. Younger children can begin with simple earning and saving, while older children get more responsibility — all from one parent view.",
+
+        features:[
+          "Multiple child profiles",
+          "Different limits for each child",
+          "Individual chore and allowance schedules",
+          "Age-specific learning",
+          "Teen independence controls",
+          "One parent overview"
+        ],
+
+        cta:
+          "See the Family plan"
+      };
+
+    } else if (
+      score >= 5 ||
+      oldest >= 1
+    ) {
+
+      result = {
+
+        tier:"GROW",
+
+        title:
+          "Give them room to make real money decisions.",
+
+        copy:
+          "Your child is ready for more responsibility, but they still benefit from clear boundaries. Grow gives them space to practise while keeping you informed.",
+
+        features:[
+          "Automated allowances",
+          "Chore-linked payments",
+          "Savings goals",
+          "Spending insights",
+          "Parent notifications",
+          "Age-progressive learning"
+        ],
+
+        cta:
+          "See the Grow plan"
+      };
+
+    } else {
+
+      result = {
+
+        tier:"START",
+
+        title:
+          "Start with simple habits that can last a lifetime.",
+
+        copy:
+          "Your child is at a great age to begin understanding earning, saving and spending through small, everyday decisions.",
+
+        features:[
+          "Parent-led controls",
+          "Chore-linked allowance",
+          "Visual savings goals",
+          "Simple progress rewards",
+          "Foundational money lessons"
+        ],
+
+        cta:
+          "See the Start plan"
+      };
+
+    }
+
+
+    bar.style.width = "100%";
+
+    quiz.innerHTML = `
+      <div class="result">
+
+        <div class="tier">
+          YOUR MATCH · ${result.tier}
+        </div>
+
+        <h2>
+          ${result.title}
+        </h2>
+
+        <p>
+          ${result.copy}
+        </p>
+
+        <ul>
+          ${result.features
+            .map(feature => `<li>${feature}</li>`)
+            .join("")}
+        </ul>
+
+        <div class="buttons">
+
+          <button class="btn primary">
+            ${result.cta} →
+          </button>
+
+          <button class="btn secondary" id="restart">
+            Start again
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+
+    document
+      .getElementById("restart")
+      .addEventListener("click", () => {
+
+        step = 0;
+        answers = [];
+        renderQuestion();
+
+      });
+
+  }
+
+
+  renderQuestion();
+</script>
+
+</body>
+</html>
